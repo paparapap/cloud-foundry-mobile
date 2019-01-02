@@ -1,6 +1,6 @@
 # cloud_foundry
 
-Cloud foundry client for mobile
+Unofficial Cloud foundry client for IOS/Android
 
 ## Getting Started
 
