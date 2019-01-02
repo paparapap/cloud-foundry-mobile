@@ -15,6 +15,7 @@
 *.ipr
 *.iws
 .idea/
+.idea/httpRequests
 
 # Visual Studio Code related
 .vscode/
