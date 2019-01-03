@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
     await _cfHttpService.initWithUrls(_apiUrl, _authUrl);
     bool success = await _cfHttpService.login(_email, _password);
     if (success) {
-      Navigator.push(
+      Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) => OrganizationsScreen(_cfHttpService)));

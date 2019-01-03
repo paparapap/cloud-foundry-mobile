@@ -51,9 +51,15 @@ class OrganizationsScreen extends StatelessWidget {
   Widget _buildOrganizationRow(BuildContext context, int index) {
     String name = data["resources"][index]["entity"]["name"];
     String id = data["resources"][index]["metadata"]["guid"];
-    return RaisedButton(
-      child: Text(name),
-      onPressed: () {
+    return InkWell(
+      child: Container(
+        child: Text(name,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center),
+        padding: EdgeInsets.all(30),
+        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey, style: BorderStyle.solid))),
+      ),
+      onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(

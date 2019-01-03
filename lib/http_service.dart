@@ -56,7 +56,7 @@ class CFHttpService {
       "Accept": "application/json",
       "Authorization": "Bearer ${await storage.read(key: ACCESS_TOKEN_KEY)}"
     };
-    Uri uri = Uri.https("login.sys.bellabeat.io:443", "/userinfo");
+    Uri uri = Uri.https(authUrl, "/userinfo");
 
     http.Response res = await client.get(uri, headers: headers);
     return res.statusCode == 200;
@@ -159,6 +159,9 @@ class CFHttpService {
       "Accept": "application/json",
       "Authorization": "Basic Y2Y6"
     };
+    if (authUrl == null) {
+      await init();
+    }
     Uri uri = Uri.https(authUrl, "/oauth/token");
 
     http.Response res = await client.post(uri, headers: headers, body: form);

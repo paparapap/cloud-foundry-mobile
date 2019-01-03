@@ -54,17 +54,23 @@ class OrganizationScreen extends StatelessWidget {
     String id = spaces["resources"][index]["metadata"]["guid"];
     String name = spaces["resources"][index]["entity"]["name"];
     print("Building for space $name, $id");
-    return RaisedButton(
-      child: Text(name),
-      onPressed: () {
+    return InkWell(
+      child: Container(
+        child: Text(name,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center),
+        padding: EdgeInsets.all(30),
+        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey, style: BorderStyle.solid))),
+      ),
+      onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => SpaceScreen(
-                      _cfHttpService,
-                      id: id,
-                      name: name,
-                    )));
+                  _cfHttpService,
+                  id: id,
+                  name: name,
+                )));
       },
     );
   }
