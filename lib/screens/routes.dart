@@ -24,19 +24,11 @@ class RoutesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text(
-          'Routes',
-          style: TextStyle(fontSize: 10),
-        ),
-        ListView.builder(
-            itemBuilder: (context, index) => _buildRouteView(context, index),
-            itemCount: routes.length,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics()),
-      ],
-    );
+    return ListView.builder(
+        itemBuilder: (context, index) => _buildRouteView(context, index),
+        itemCount: routes.length,
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics());
   }
 
   Widget _buildRouteView(BuildContext context, int index) {

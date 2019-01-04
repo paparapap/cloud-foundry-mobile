@@ -60,17 +60,20 @@ class OrganizationScreen extends StatelessWidget {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center),
         padding: EdgeInsets.all(30),
-        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey, style: BorderStyle.solid))),
+        decoration: BoxDecoration(
+            border: Border(
+                bottom:
+                    BorderSide(color: Colors.grey, style: BorderStyle.solid))),
       ),
       onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => SpaceScreen(
-                  _cfHttpService,
-                  id: id,
-                  name: name,
-                )));
+                      _cfHttpService,
+                      id: id,
+                      name: name,
+                    )));
       },
     );
   }

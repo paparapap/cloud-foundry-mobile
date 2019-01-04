@@ -33,15 +33,14 @@ class CFHttpService {
   String apiUrl;
   String authUrl;
 
-  Future<void> initWithUrls(String apiUrl, String authUrl) async {
+  Future<void> initWithUrls(String apiUrl) async {
     await storage.write(key: API_URL_KEY, value: apiUrl);
-    await storage.write(key: AUTH_URL_KEY, value: authUrl);
     init();
   }
 
   Future<void> init() async {
     apiUrl = await storage.read(key: API_URL_KEY);
-    authUrl = await storage.read(key: AUTH_URL_KEY);
+    authUrl = await _loginUrl();
 
     dio.options.baseUrl = "https://$apiUrl";
     dio.options.responseType = ResponseType.JSON;
@@ -105,7 +104,7 @@ class CFHttpService {
         case 401:
           print("Refreshing access token");
           if (await _refresh()) {
-            return executeAuthorized(res.request.toString());
+            return await executeAuthorized(res.request.toString());
           } else {
             throw Exception("Unable to refresh token. Please relogin");
           }
@@ -119,7 +118,7 @@ class CFHttpService {
 
   Future<bool> login(String username, String password) async {
     if (authUrl == null) {
-      await init();
+      init();
     }
     Map form = {
       "client_id": "cf",
@@ -134,7 +133,7 @@ class CFHttpService {
       "Accept": "application/json",
       "Authorization": "Basic Y2Y6"
     };
-    Uri uri = Uri.https(await storage.read(key: AUTH_URL_KEY), "/oauth/token");
+    Uri uri = Uri.https(authUrl, "/oauth/token");
 
     http.Response res = await client.post(uri, headers: headers, body: form);
     if (res.statusCode != 200) {
@@ -177,6 +176,18 @@ class CFHttpService {
       await logout();
       return false;
     }
+  }
+
+  cfInfo(String infoHost) async {
+    var res = await client.get(Uri.https(infoHost, "/v2/info"));
+    return jsonDecode(res.body);
+  }
+
+  _loginUrl() async {
+    var res = await cfInfo(apiUrl);
+    String url = res['authorization_endpoint'];
+
+    return url.replaceFirst('https://', '');
   }
 
   Future<void> logout() async {

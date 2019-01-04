@@ -23,20 +23,11 @@ class ServicesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text(
-          'Services',
-          style: TextStyle(fontSize: 10),
-        ),
-        ListView.builder(
-          itemBuilder: (context, index) =>
-              ServiceItem(service: services[index]),
-          itemCount: services.length,
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-        )
-      ],
+    return ListView.builder(
+      itemBuilder: (context, index) => ServiceItem(service: services[index]),
+      itemCount: services.length,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
     );
   }
 }

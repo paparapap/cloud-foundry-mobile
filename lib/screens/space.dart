@@ -17,9 +17,9 @@
 import 'package:flutter/material.dart';
 
 import '../http_service.dart';
-import 'app-summary.dart';
 import 'app.dart';
 import 'generic.dart';
+import 'app_global.dart';
 
 class SpaceScreen extends StatelessWidget {
   SpaceScreen(this._cfHttpService, {this.id, this.name});
@@ -77,8 +77,12 @@ class SpaceScreen extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    AppSummary(_cfHttpService, name: name, appId: id)));
+                builder: (context) => AppGlobalScreen(
+                      _cfHttpService,
+                      name: name,
+                      appId: id,
+                    )));
+//                    AppSummary(_cfHttpService, name: name, appId: id)));
       },
     );
   }

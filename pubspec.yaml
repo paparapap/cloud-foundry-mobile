@@ -26,6 +26,8 @@ dependencies:
   duration:
   sentry: ^2.0.0
   flutter_secure_storage: ^3.1.2
+  protobuf: ^0.10.6
+  web_socket_channel: ^1.0.9
 
 dev_dependencies:
   flutter_test:

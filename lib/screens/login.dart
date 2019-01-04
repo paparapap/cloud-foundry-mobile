@@ -15,7 +15,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'dart:async';
+import 'info.dart';
 
 import '../http_service.dart';
 import 'organizations.dart';
@@ -32,19 +32,15 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailFilter = new TextEditingController();
   final TextEditingController _passwordFilter = new TextEditingController();
-  TextEditingController _authUrlFilter;
   TextEditingController _apiUrlFilter;
   String _email = "";
   String _password = "";
-  String _authUrl = "";
-  String _apiUrl = "";
+  String _apiUrl = "api.run.pivotal.io";
   final CFHttpService _cfHttpService;
 
   _LoginScreenState(this._cfHttpService) {
-    _authUrlFilter = new TextEditingController(
-        text: _cfHttpService.authUrl ?? "login.run.pivotal.io");
     _apiUrlFilter = new TextEditingController(
-        text: _cfHttpService.apiUrl ?? "api.run.pivotal.io");
+        text: _cfHttpService.apiUrl ?? _apiUrl);
 
     void _emailListen() {
       if (_emailFilter.text.isEmpty) {
@@ -62,14 +58,6 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
 
-    void _authUrlListen() {
-      if (_authUrlFilter.text.isEmpty) {
-        _authUrl = "";
-      } else {
-        _authUrl = _authUrlFilter.text;
-      }
-    }
-
     void _apiUrlListen() {
       if (_apiUrlFilter.text.isEmpty) {
         _apiUrl = "";
@@ -81,11 +69,29 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailFilter.addListener(_emailListen);
     _passwordFilter.addListener(_passwordListen);
     _apiUrlFilter.addListener(_apiUrlListen);
-    _authUrlFilter.addListener(_authUrlListen);
+  }
+
+  void _testPressed() async {
+    var info = await _cfHttpService.cfInfo(_apiUrl);
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text("Success"),
+            content: InfoScreen(info: info,),
+            actions: <Widget>[
+              new FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: new Text("Close"))
+            ],
+          );
+        });
   }
 
   void _loginPressed() async {
-    await _cfHttpService.initWithUrls(_apiUrl, _authUrl);
+    await _cfHttpService.initWithUrls(_apiUrl);
     bool success = await _cfHttpService.login(_email, _password);
     if (success) {
       Navigator.pushReplacement(
@@ -140,12 +146,6 @@ class _LoginScreenState extends State<LoginScreen> {
         children: <Widget>[
           new Container(
             child: new TextField(
-              controller: _authUrlFilter,
-              decoration: new InputDecoration(labelText: 'Auth URL'),
-            ),
-          ),
-          new Container(
-            child: new TextField(
               controller: _apiUrlFilter,
               decoration: new InputDecoration(labelText: 'API URL'),
             ),
@@ -172,6 +172,9 @@ class _LoginScreenState extends State<LoginScreen> {
     return new Container(
       child: new Column(
         children: <Widget>[
+          new RaisedButton(
+              child: new Text('Test'),
+              onPressed: _testPressed),
           new RaisedButton(
             child: new Text('Login'),
             onPressed: _loginPressed,
