@@ -118,6 +118,9 @@ class CFHttpService {
   }
 
   Future<bool> login(String username, String password) async {
+    if (authUrl == null) {
+      await init();
+    }
     Map form = {
       "client_id": "cf",
       "client_secret": "",
